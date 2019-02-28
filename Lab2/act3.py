@@ -1,6 +1,7 @@
+
 import numpy as np
 import matplotlib.pyplot as plt
-import statistics as stats
+from scipy import stats
 import math
 
 dataact1=np.loadtxt("Data3-1.txt", skiprows=1)
@@ -9,7 +10,7 @@ d=dataact1[:,1]
 c=dataact1[:,2]
 
 plt.figure(1)
-plt.plot(d,c)
+plt.scatter(d,c)
 plt.ylabel('Conteos')
 plt.xlabel('Distancia [cm]')
 plt.title('Conteos vs Distancia [cm]')
@@ -20,16 +21,13 @@ dd=[]
 for i in range(len(d)):
 	dd.append(1.0/(d[i]**2))
 
-z = np.polyfit(dd, c,1)
-p = np.poly1d(z)
+slope, intercept, r_value, p_value, std_err = stats.linregress(dd,c)
 
-xp = np.linspace(0, 6000, 100)
+y = []
+for i in range(len(dd)):
+	y.append(dd[i]*slope + intercept)
 
 plt.figure(2)
-plt.plot(dd,c)
-plt.plot(p(xp),c)
-
-plt.ylabel('Conteos')
-plt.xlabel('Distancia [cm]')
-plt.title('Conteos vs Distancia [cm]')
+plt.scatter(dd, c)
+plt.plot(dd, y)
 plt.show()
